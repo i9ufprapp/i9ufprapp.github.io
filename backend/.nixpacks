@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["python310", "postgresql"]
+
+[phases.build]
+cmds = ["pip install --no-cache-dir -r requirements.txt"]
+
+[phases.start]
+cmds = ["./start.sh"]
