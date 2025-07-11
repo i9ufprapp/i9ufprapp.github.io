@@ -7,7 +7,7 @@ from pathlib import Path
 BASE_URL = "http://127.0.0.1:5000"
 
 # Diretório com imagens de exemplo (crie este diretório e adicione algumas imagens)
-IMAGES_DIR = Path(r"C:/Users/joao.pereira/Desktop/geral/projetos/cpt/plataforma gestao/backend/test_images")
+IMAGES_DIR = Path(r"C:/Users/anajs/OneDrive/Documentos/server/i9ufprapp.github.io/backend/test_images")
 os.makedirs(IMAGES_DIR, exist_ok=True)
 
 # Função auxiliar para formatar datas

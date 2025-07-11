@@ -360,6 +360,7 @@ def get_atividades_por_setor(setor_id):
         {'id': at.id, 'descricao': at.descricao, 'status': at.status, 'data_inicio': at.data_inicio, 'data_fim_real': at.data_fim_real, 'nivel': at.nivel}
         for at in atividades])
 
+        
 @app.route('/alunos/horas', methods=['GET'])
 def get_horas_trabalhadas_todos():
     alunos = Aluno.query.all()
@@ -385,6 +386,7 @@ def get_horas_trabalhadas_todos():
             setor = Setor.query.get(aluno.setor_id)
             if setor:
                 setor_nome = setor.nome
+                # Busca o projeto relacionado ao setor
                 projeto = Projeto.query.get(setor.projeto_id)
                 if projeto:
                     projeto_nome = projeto.nome
@@ -394,12 +396,12 @@ def get_horas_trabalhadas_todos():
             'aluno_id': aluno.id,
             'nome': aluno.nome,
             'email': aluno.email,
-            'setor_id': aluno.setor_id  ,
+            'setor_id': aluno.setor_id,
             'setor_nome': setor_nome,
             'projeto_id': projeto_id,
             'projeto_nome': projeto_nome,
             'horas_trabalhadas': total_horas,
-            'horas_meta': alunos.horas_semana
+            'horas_meta': aluno.horas_semana  # Corrigido: usando aluno em vez de alunos
         })
     
     return jsonify(resultado)
