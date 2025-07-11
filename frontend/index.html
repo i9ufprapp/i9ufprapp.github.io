@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    body {
+      font-family: "Nunito", sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background-image: url(https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/5baf8325-ed69-40b0-b9d2-d8c5d2bde3b0);
+      background-repeat: no-repeat;
+      background-size: cover;
+      margin: 0;
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    h1 {
+      color: rgb(73, 57, 113);
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group {
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: rgb(73, 57, 113);
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: rgb(73, 57, 113);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: rgb(60, 47, 94);
+    }
+
+    .error-message {
+      color: #d32f2f;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="login-container">
+    <h1>Login</h1>
+    <form id="login-form">
+      <div class="input-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="input-group">
+        <label for="password">Senha</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <button type="submit">Entrar</button>
+      <div id="error-message" class="error-message" style="display: none;"></div>
+    </form>
+  </div>
+  <script>
+    document.getElementById("login-form").addEventListener("submit", function (event) {
+      event.preventDefault(); // Impede o envio padrão do formulário
+
+      // Esconde mensagens de erro anteriores
+      document.getElementById("error-message").style.display = "none";
+
+      // Coleta os dados do formulário
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      // Dados para enviar na requisição POST
+      const data = {
+        email: email,
+        senha: password,
+      };
+
+      // Envia a requisição POST para a API
+      const api = 'https://meuappflask123.loca.lt'
+      const urllogin = `${api}/login`
+      
+      fetch(urllogin, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "User-Agent": "CustomBot/1.0",         
+          "Accept": "application/json",
+          "bypass-tunnel-reminder": "1",    
+        },
+        body: JSON.stringify(data),
+      })
+      .then((response) => {
+        if (response.status === 401) {
+          // Mostra mensagem de login inválido
+          const errorElement = document.getElementById("error-message");
+          errorElement.textContent = "Login inválido. Verifique suas credenciais.";
+          errorElement.style.display = "block";
+          throw new Error("Login inválido");
+        }
+        return response.json();
+      })
+      .then((result) => {
+        console.log("Sucesso:", result);
+
+        localStorage.setItem("nome", email);
+        localStorage.setItem("id", result.id);
+        localStorage.setItem("setorid", result.setorid);
+        localStorage.setItem("image_url", result.image_url);
+        
+        // Redirecionar para a página home
+        window.location.href = "home.html";
+      })
+      .catch((error) => {
+        console.error("Erro:", error);
+        // Só mostra alerta genérico se não for erro 401 (que já foi tratado)
+        if (error.message !== "Login inválido") {
+          alert("Erro ao realizar login. Tente novamente.");
+        }
+      });
+    });
+  </script>
+</body>
+</html>
